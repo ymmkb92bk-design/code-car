@@ -1,0 +1,48 @@
+name: dtc_app
+description: "أكواد الأعطال - DTC Lookup App"
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.3.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Backend
+  supabase_flutter: ^2.6.0
+
+  # Network status (Section 4.6)
+  connectivity_plus: ^6.0.5
+
+  # Local persistence — consent flag (Section 4.1), cached device id
+  shared_preferences: ^2.3.2
+
+  # Stable per-device identifier for quota tracking (Section 3, 5)
+  device_info_plus: ^13.2.0
+  uuid: ^4.5.1
+
+  # Native OS share sheet (Section 8)
+  # Pinned to 13.x — 7.x's build.gradle declares an old compileSdk incompatible
+  # with its own updated androidx transitive deps under this Flutter SDK.
+  share_plus: ^13.0.0
+
+  # Google AdMob (Section 6.2 build order step)
+  # Pinned to 9.x — 5.x's build.gradle uses a Gradle Configuration API that
+  # this Flutter SDK's bundled Gradle/AGP no longer supports.
+  google_mobile_ads: ^9.0.0
+
+  # Google Play Billing subscription (Section 6.3 build order step)
+  in_app_purchase: ^3.2.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^4.0.0
+
+flutter:
+  uses-material-design: true

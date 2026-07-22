@@ -1,0 +1,12 @@
+# Contains command-history strings with a plaintext DB password — never commit
+.claude/settings.local.json
+
+# Flutter/Dart (dtc_app/ has its own .gitignore too, this is a backstop)
+**/.dart_tool/
+**/build/
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+
+# Secrets
+dtc_app/dart_defines.json
+**/*.env
