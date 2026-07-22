@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../config/app_info.dart';
+import '../services/device_id_service.dart';
+import '../services/dtc_repository.dart';
 import '../theme/colors.dart';
 
 /// About/Settings screen — app version, support contact, Privacy Policy
@@ -36,6 +38,42 @@ class SettingsScreen extends StatelessWidget {
       text: 'تطبيق أكواد الأعطال — دليلك السريع لفهم أكواد أعطال السيارة\n'
           'حمّل التطبيق: ${AppInfo.playStoreUrl}',
     ));
+  }
+
+  /// Self-service data deletion (PDPL right to deletion) — a real working
+  /// mechanism, not just a promise handled manually over email.
+  Future<void> _confirmAndDeleteData(BuildContext context) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: AppColors.panelRaised,
+        title: const Text('حذف بياناتي', style: TextStyle(color: AppColors.text)),
+        content: const Text(
+          'سيتم حذف سجل بحثك وحالة استخدامك اليومي نهائياً من خوادمنا. لا يمكن التراجع عن هذا الإجراء.',
+          style: TextStyle(color: AppColors.textMuted),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(false),
+            child: const Text('إلغاء'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(true),
+            child: const Text('حذف', style: TextStyle(color: AppColors.red)),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed != true || !context.mounted) return;
+
+    final deviceId = await DeviceIdService.getDeviceId();
+    final success = await DtcRepository().deleteMyData(deviceId);
+
+    if (!context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text(success ? 'تم حذف بياناتك بنجاح' : 'حدث خطأ، حاول مرة أخرى')),
+    );
   }
 
   @override
@@ -86,6 +124,13 @@ class SettingsScreen extends StatelessWidget {
                 title: 'شارك التطبيق',
                 onTap: _shareApp,
               ),
+              const SizedBox(height: 12),
+              _SettingsTile(
+                icon: Icons.delete_outline,
+                iconColor: AppColors.red,
+                title: 'حذف بياناتي',
+                onTap: () => _confirmAndDeleteData(context),
+              ),
             ],
           ),
         ),
@@ -96,11 +141,12 @@ class SettingsScreen extends StatelessWidget {
 
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
+  final Color? iconColor;
   final String title;
   final String? subtitle;
   final VoidCallback? onTap;
 
-  const _SettingsTile({required this.icon, required this.title, this.subtitle, this.onTap});
+  const _SettingsTile({required this.icon, this.iconColor, required this.title, this.subtitle, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -116,7 +162,7 @@ class _SettingsTile extends StatelessWidget {
         ),
         child: Row(
           children: [
-            Icon(icon, color: AppColors.amber, size: 22),
+            Icon(icon, color: iconColor ?? AppColors.amber, size: 22),
             const SizedBox(width: 12),
             Expanded(
               child: Column(

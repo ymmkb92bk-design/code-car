@@ -40,4 +40,18 @@ class DtcRepository {
       return true;
     }
   }
+
+  /// Self-service data deletion (PDPL right to deletion) — wipes this
+  /// device's search history, usage/quota record, and subscription record.
+  /// Returns false on any error so the UI can show a real failure message
+  /// rather than falsely claiming success.
+  Future<bool> deleteMyData(String deviceId) async {
+    try {
+      final response = await _client.rpc('delete_my_data', params: {'p_device_id': deviceId});
+      final map = response as Map<String, dynamic>;
+      return map['success'] == true;
+    } catch (_) {
+      return false;
+    }
+  }
 }

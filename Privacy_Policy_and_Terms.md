@@ -32,11 +32,13 @@ the moment the SDK initializes, for ad serving/measurement purposes, per Google'
 - **Consent must be real**, not implied: an unchecked, opt-in checkbox the user must actively
   tick (already reflected in the consent screen spec — Section 4.1 of `PROJECT_SPEC.md` — do
   not pre-check it, do not bury it in a scroll the user won't read).
-- **Right to deletion must be a working mechanism**, not just a promise in text. A user must
-  be able to actually get their device ID's search history and subscription record deleted on
-  request. (This needs an operational process — e.g., an email/support channel the developer
-  actually monitors and a documented internal procedure for finding and deleting a device_id's
-  rows across `users`, `daily_usage`, `search_logs`.)
+- **Right to deletion must be a working mechanism**, not just a promise in text.
+  **Status: implemented** — a self-service "حذف بياناتي" (Delete my data) button in the
+  Settings screen (`lib/screens/settings_screen.dart`) calls the `delete_my_data` Postgres RPC
+  (`supabase/migrations/005_delete_my_data.sql`), which wipes the device's rows from
+  `search_logs`, `daily_usage`, and `users` immediately — no manual developer processing
+  required. The support email remains available as a fallback for anyone who can't use the
+  in-app button.
 - **72-hour breach notification duty** to SDAIA (Saudi Data & AI Authority) if a data breach
   occurs — this needs to be a real, actionable plan, not just a policy sentence.
 - **Cross-border data transfer must be disclosed.** Supabase's servers are not physically
