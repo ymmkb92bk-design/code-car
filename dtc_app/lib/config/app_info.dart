@@ -6,9 +6,7 @@ class AppInfo {
 
   static const supportEmail = 'codecarsupport@gmail.com';
 
-  // TODO: replace with the real GitHub Pages URL once the repo is pushed
-  // and Pages is enabled (see Privacy_Policy_and_Terms.md / SETUP.md).
-  static const privacyPolicyUrl = 'https://example.com/privacy-policy-pending';
+  static const privacyPolicyUrl = 'https://ymmkb92bk-design.github.io/code-car/privacy-policy.html';
 
   // TODO: replace once the real package name/Play Store listing exist.
   static const playStoreUrl = 'https://play.google.com/store/apps/details?id=com.example.dtc_app';
