@@ -17,6 +17,4 @@ class AdConfig {
     'ADMOB_REWARDED_UNIT_ID',
     defaultValue: 'ca-app-pub-5335304138389032/1112326131',
   );
-
-  static bool get usingTestAds => rewardedAdUnitId == 'ca-app-pub-3940256099942544/5224354917';
 }

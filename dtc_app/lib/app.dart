@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:share_plus/share_plus.dart';
+import 'config/app_info.dart';
 import 'models/dtc_result.dart';
 import 'models/search_outcome.dart';
 import 'screens/ad_screen.dart';
@@ -17,6 +18,7 @@ import 'services/connectivity_service.dart';
 import 'services/consent_service.dart';
 import 'services/device_id_service.dart';
 import 'services/dtc_repository.dart';
+import 'services/rate_prompt_service.dart';
 import 'services/subscription_service.dart';
 import 'theme/colors.dart';
 
@@ -48,6 +50,7 @@ class _DtcAppRootState extends State<DtcAppRoot> {
   DtcResult? _result;
   bool _detailUnlocked = false;
   bool _watchingAd = false;
+  bool _lastOutcomeWasNotFound = false;
 
   StreamSubscription<bool>? _connectivitySub;
 
@@ -90,6 +93,7 @@ class _DtcAppRootState extends State<DtcAppRoot> {
   }
 
   Future<void> _runSearch(String code, String? brand) async {
+    final precededByNotFound = _lastOutcomeWasNotFound;
     setState(() {
       _screen = _Screen.ad;
       _lastCode = code;
@@ -112,10 +116,12 @@ class _DtcAppRootState extends State<DtcAppRoot> {
         case SearchOutcomeType.found:
           _result = outcome.result;
           _screen = _Screen.results;
+          _lastOutcomeWasNotFound = false;
           break;
         case SearchOutcomeType.notFound:
           _result = null;
           _screen = _Screen.notFound;
+          _lastOutcomeWasNotFound = true;
           break;
         case SearchOutcomeType.quotaExceeded:
           _screen = _Screen.paywall;
@@ -125,6 +131,10 @@ class _DtcAppRootState extends State<DtcAppRoot> {
           break;
       }
     });
+
+    if (outcome.type == SearchOutcomeType.found) {
+      unawaited(RatePromptService.maybePromptAfterSuccess(precededByNotFound: precededByNotFound));
+    }
   }
 
   Future<void> _watchRewardedAd(BuildContext context) async {
@@ -185,7 +195,7 @@ class _DtcAppRootState extends State<DtcAppRoot> {
     if (r == null) return;
     final text = '${r.code} - ${r.meaning}\n'
         'الخطورة: ${r.severity}\n\n'
-        'حمّل التطبيق: play.google.com/store/apps/details?id=com.example.dtc_app';
+        'حمّل التطبيق: ${AppInfo.playStoreUrl}';
     await SharePlus.instance.share(ShareParams(text: text));
   }
 

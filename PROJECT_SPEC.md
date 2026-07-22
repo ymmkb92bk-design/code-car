@@ -128,6 +128,9 @@ On search: log the attempt to `search_logs` regardless of outcome (code, brand, 
 - If the device has no network connection, show this instead of any other screen: "لا يوجد اتصال بالإنترنت" + explanation + "إعادة المحاولة" button
 - Detect via the platform's standard network-status API (e.g., `navigator.onLine` equivalent, or Flutter's `connectivity_plus` package)
 
+### 4.7 Settings/About screen (added post-spec, launch-prep requirement)
+Not in the original screen list — added because Google Play requires a Privacy Policy link accessible from inside the app itself, not just on the Play Store listing page. Reached via a small settings icon on the search screen (doesn't interrupt the app's single-purpose flow). Shows: app version, support contact email (opens the device's mail app), a Privacy Policy/Terms link (opens in browser), and a "شارك التطبيق" share action.
+
 ---
 
 ## 5. Monetization logic

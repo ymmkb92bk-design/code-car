@@ -13,5 +13,3 @@ const List<String> kVehicleBrands = [
   'بي إم دبليو',
   'مازدا',
 ];
-
-const String kUnspecifiedBrand = 'غير محدد';

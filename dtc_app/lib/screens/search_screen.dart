@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../theme/colors.dart';
 import '../utils/dtc_input_sanitizer.dart';
 import '../widgets/brand_dropdown.dart';
+import 'settings_screen.dart';
 
 /// Section 4.2.
 class SearchScreen extends StatefulWidget {
@@ -52,7 +53,22 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
-              const SizedBox(height: 16),
+              Align(
+                alignment: Alignment.centerLeft,
+                child: OutlinedButton.icon(
+                  onPressed: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    backgroundColor: AppColors.panelRaised,
+                    side: const BorderSide(color: AppColors.border),
+                    foregroundColor: AppColors.text,
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                  ),
+                  icon: const Icon(Icons.settings_outlined, size: 18, color: AppColors.textMuted),
+                  label: const Text('الإعدادات', style: TextStyle(fontSize: 13)),
+                ),
+              ),
               const Text(
                 'ابحث عن كود العطل',
                 textAlign: TextAlign.center,

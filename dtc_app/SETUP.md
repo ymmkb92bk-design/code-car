@@ -31,6 +31,13 @@ deliberately since changing it later touches multiple platform files.
 10. ~~Share button~~ — `lib/app.dart`'s `_shareResult`, using `share_plus`
 11. End-to-end test, Play Store listing prep
 
+## Post-spec additions (launch-prep polish, not in the original build order)
+
+- ~~Rate-app prompt~~ — `lib/services/rate_prompt_service.dart`, using the native `in_app_review` API (not a custom dialog). Never on the first-ever successful search or right after a not-found result; re-asks every 5th qualifying successful search after that (there's no API to detect an actual completed rating, so "ask until they rate" isn't possible — Google's own review API enforces its own cooldown on how often the real dialog shows, so repeated requests are safe). **Note**: the native dialog generally only works for Play Store-installed builds — during `flutter run` sideloaded testing it will likely no-op even when the code runs correctly; check the `RatePromptService: count=X, isAvailable=Y` debug log line to confirm.
+- ~~Settings/About screen~~ — `lib/screens/settings_screen.dart`, reached via a small gear icon on the search screen. Shows app version, support email (`lib/config/app_info.dart` — opens the device's mail app via `mailto:`), a Privacy Policy/Terms link, and a share-the-app action. **The Privacy Policy URL is still a placeholder** (`AppInfo.privacyPolicyUrl` — `https://example.com/privacy-policy-pending`) — must be replaced with the real GitHub Pages URL once the repo is pushed and Pages is enabled.
+- Firebase Crashlytics — **pending**: blocked on the final Android package name (currently `com.example.dtc_app`, a placeholder — must be decided before creating the Firebase project, since Firebase ties its config to the package name).
+- Package name decision — **pending user input**. Also blocks the Google Play Console app entry.
+
 The `supabase_flutter` client is initialized in `lib/main.dart` with the project URL (defaulted
 in `lib/config/env.dart`) and the **anon** key (never the service_role key, which must stay
 server-side/in Edge Functions per Section 6). Run with:

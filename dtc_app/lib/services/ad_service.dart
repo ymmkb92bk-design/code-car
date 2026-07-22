@@ -37,8 +37,6 @@ class AdService {
     );
   }
 
-  bool get isRewardedReady => _rewardedAd != null;
-
   /// Shows the rewarded ad if ready. Returns true only if the user actually
   /// earned the reward (watched it through) — details unlock only on a
   /// genuine earned reward, never just on tapping the button.

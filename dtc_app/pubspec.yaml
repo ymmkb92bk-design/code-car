@@ -39,6 +39,12 @@ dependencies:
   # Google Play Billing subscription (Section 6.3 build order step)
   in_app_purchase: ^3.2.0
 
+  # Native "rate the app" prompt after a successful search
+  in_app_review: ^2.0.9
+
+  # Opening mailto: and the Privacy Policy link from the Settings screen
+  url_launcher: ^6.3.0
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

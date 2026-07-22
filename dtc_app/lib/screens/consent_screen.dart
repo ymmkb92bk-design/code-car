@@ -1,4 +1,7 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
+import '../config/app_info.dart';
 import '../theme/colors.dart';
 
 /// Section 4.1. Deliberately a single vertically-centered flowing column —
@@ -15,6 +18,25 @@ class ConsentScreen extends StatefulWidget {
 
 class _ConsentScreenState extends State<ConsentScreen> {
   bool _checked = false;
+  late final TapGestureRecognizer _linkRecognizer;
+
+  @override
+  void initState() {
+    super.initState();
+    _linkRecognizer = TapGestureRecognizer()..onTap = _openPolicy;
+  }
+
+  @override
+  void dispose() {
+    _linkRecognizer.dispose();
+    super.dispose();
+  }
+
+  Future<void> _openPolicy() async {
+    // Terms of Use and Privacy Policy are one combined document for now
+    // (Privacy_Policy_and_Terms.md) — both links point to the same page.
+    await launchUrl(Uri.parse(AppInfo.privacyPolicyUrl), mode: LaunchMode.externalApplication);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,22 +101,24 @@ class _ConsentScreenState extends State<ConsentScreen> {
                           activeColor: AppColors.amber,
                           onChanged: (v) => setState(() => _checked = v ?? false),
                         ),
-                        const Expanded(
+                        Expanded(
                           child: Padding(
-                            padding: EdgeInsets.only(top: 12),
+                            padding: const EdgeInsets.only(top: 12),
                             child: Text.rich(
                               TextSpan(
-                                style: TextStyle(color: AppColors.textMuted, fontSize: 16, height: 1.7),
+                                style: const TextStyle(color: AppColors.textMuted, fontSize: 16, height: 1.7),
                                 children: [
-                                  TextSpan(text: 'بالمتابعة، أنت توافق على '),
+                                  const TextSpan(text: 'بالمتابعة، أنت توافق على '),
                                   TextSpan(
                                     text: 'شروط الاستخدام',
-                                    style: TextStyle(color: AppColors.amber, decoration: TextDecoration.underline),
+                                    style: const TextStyle(color: AppColors.amber, decoration: TextDecoration.underline),
+                                    recognizer: _linkRecognizer,
                                   ),
-                                  TextSpan(text: ' و'),
+                                  const TextSpan(text: ' و'),
                                   TextSpan(
                                     text: 'سياسة الخصوصية',
-                                    style: TextStyle(color: AppColors.amber, decoration: TextDecoration.underline),
+                                    style: const TextStyle(color: AppColors.amber, decoration: TextDecoration.underline),
+                                    recognizer: _linkRecognizer,
                                   ),
                                 ],
                               ),
