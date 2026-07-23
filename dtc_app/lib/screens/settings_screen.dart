@@ -49,7 +49,8 @@ class SettingsScreen extends StatelessWidget {
         backgroundColor: AppColors.panelRaised,
         title: const Text('حذف بياناتي', style: TextStyle(color: AppColors.text)),
         content: const Text(
-          'سيتم حذف سجل بحثك وحالة استخدامك اليومي نهائياً من خوادمنا. لا يمكن التراجع عن هذا الإجراء.',
+          'سيتم حذف سجل بحثك نهائياً من خوادمنا. لا يمكن التراجع عن هذا الإجراء. '
+          '(يبقى عداد البحث المجاني اليومي كما هو، ولا يتأثر بهذا الحذف)',
           style: TextStyle(color: AppColors.textMuted),
         ),
         actions: [

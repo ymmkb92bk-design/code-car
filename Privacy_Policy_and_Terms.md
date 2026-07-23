@@ -35,10 +35,13 @@ the moment the SDK initializes, for ad serving/measurement purposes, per Google'
 - **Right to deletion must be a working mechanism**, not just a promise in text.
   **Status: implemented** — a self-service "حذف بياناتي" (Delete my data) button in the
   Settings screen (`lib/screens/settings_screen.dart`) calls the `delete_my_data` Postgres RPC
-  (`supabase/migrations/005_delete_my_data.sql`), which wipes the device's rows from
-  `search_logs`, `daily_usage`, and `users` immediately — no manual developer processing
-  required. The support email remains available as a fallback for anyone who can't use the
-  in-app button.
+  (`supabase/migrations/006_keep_quota_on_delete.sql`), which wipes the device's rows from
+  `search_logs` and `users` immediately — no manual developer processing required. The support
+  email remains available as a fallback for anyone who can't use the in-app button.
+  **Disclosed exception**: `daily_usage` (the daily free-search quota counter) is deliberately
+  NOT deleted — it's a rate-limiting counter, not personal search content, and deleting it would
+  let anyone bypass the 3/day free limit just by tapping the delete button. This is disclosed in
+  the published policy (`docs/privacy-policy.html`) rather than silently retained.
 - **72-hour breach notification duty** to SDAIA (Saudi Data & AI Authority) if a data breach
   occurs — this needs to be a real, actionable plan, not just a policy sentence.
 - **Cross-border data transfer must be disclosed.** Supabase's servers are not physically
